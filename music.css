@@ -424,6 +424,7 @@ h3{
     }
     button{
         width: 15vw;
+        overflow: hidden;
         font-size: 12px;
     }
     .songscard li{
@@ -436,6 +437,7 @@ h3{
     *{
         font-size: 10px;
     }
+
     .links h3{
         font-size: 16px;
     }
