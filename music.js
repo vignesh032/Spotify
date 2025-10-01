@@ -163,96 +163,102 @@
   
 // }
 // main();
-let currSong = new Audio();
-let playBtn = document.querySelector("#play");
-let prev = document.querySelector("#prev");
-let next = document.querySelector("#next");
-let menu = document.querySelector(".menu");
-let wrong = document.querySelector(".mark");
-let songUl = document.querySelector(".songscard ul");
-let currFolder = "songs";
+document.addEventListener("DOMContentLoaded", () => {
+  const currSong = new Audio();
+  const playBtn = document.querySelector("#play");
+  const prevBtn = document.querySelector("#prev");
+  const nextBtn = document.querySelector("#next");
+  const menu = document.querySelector(".menu");
+  const wrong = document.querySelector(".mark");
+  const songUl = document.querySelector(".songscard ul");
+  const songInfo = document.querySelector(".songInfo");
+  const timeDisplay = document.querySelector(".time");
 
-// Sidebar toggle
-menu.addEventListener("click", () => {
-  document.querySelector(".left").style.left = 0;
-});
-wrong.addEventListener("click", () => {
-  document.querySelector(".left").style.left = "-100%";
-});
+  // Songs stored in public/songs/
+  const songs = [
+    "/songs/cascade.mp3",
+    "/songs/song2.mp3",
+    "/songs/song3.mp3"
+  ];
 
-// List of songs (put these files in public/songs/)
-let songs = [
- 
-  "/songs/cascade.mp3"
-];
+  let currentIndex = 0;
 
-// Play a song
-function playMusic(src, pause = false) {
-  currSong.src = src;
-  if (!pause) {
-    currSong.play();
-    playBtn.src = "pause.svg";
-  }
-  document.querySelector(".songInfo").innerText = src.split("/").pop();
-  document.querySelector(".time").innerText = "00:00/00:00";
-}
-
-// Render songs in UI
-function renderSongs() {
-  songUl.innerHTML = "";
-  songs.forEach((song) => {
-    const fileName = song.split("/").pop();
-    const li = document.createElement("li");
-    li.dataset.song = song;
-    li.innerHTML = `
-      <div class="li">
-        <div class="name">${fileName}</div>
-        <div class="play">Play</div>
-      </div>
-    `;
-    li.addEventListener("click", () => playMusic(song));
-    songUl.appendChild(li);
+  // Sidebar toggle
+  menu.addEventListener("click", () => {
+    document.querySelector(".left").style.left = "0";
   });
-}
+  wrong.addEventListener("click", () => {
+    document.querySelector(".left").style.left = "-100%";
+  });
 
-// Play/pause toggle
-playBtn.addEventListener("click", () => {
-  if (currSong.paused) {
+  // Render song list
+  function renderSongs() {
+    songUl.innerHTML = "";
+    songs.forEach((song, index) => {
+      const fileName = song.split("/").pop();
+      const li = document.createElement("li");
+      li.dataset.index = index;
+      li.innerHTML = `
+        <div class="li">
+          <div class="name">${fileName}</div>
+          <div class="play">Play</div>
+        </div>
+      `;
+      li.addEventListener("click", () => {
+        currentIndex = index;
+        playMusic(songs[currentIndex]);
+      });
+      songUl.appendChild(li);
+    });
+  }
+
+  // Play a song
+  function playMusic(src) {
+    currSong.src = src;
     currSong.play();
     playBtn.src = "pause.svg";
-  } else {
-    currSong.pause();
-    playBtn.src = "play.svg";
+    songInfo.innerText = src.split("/").pop();
+    timeDisplay.innerText = "00:00/00:00";
   }
+
+  // Play/pause toggle
+  playBtn.addEventListener("click", () => {
+    if (currSong.paused) {
+      currSong.play();
+      playBtn.src = "pause.svg";
+    } else {
+      currSong.pause();
+      playBtn.src = "play.svg";
+    }
+  });
+
+  // Next/Prev
+  prevBtn.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      playMusic(songs[currentIndex]);
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentIndex < songs.length - 1) {
+      currentIndex++;
+      playMusic(songs[currentIndex]);
+    }
+  });
+
+  // Update time display
+  currSong.addEventListener("timeupdate", () => {
+    timeDisplay.innerText = `${formatTime(currSong.currentTime)}/${formatTime(currSong.duration)}`;
+  });
+
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  }
+
+  // Initialize
+  renderSongs();
 });
-
-// Update time
-currSong.addEventListener("timeupdate", () => {
-  document.querySelector(".time").innerText =
-    `${secondsToMinutesSeconds(currSong.currentTime)}/${secondsToMinutesSeconds(currSong.duration)}`;
-});
-
-// Next/Prev
-prev.addEventListener("click", () => {
-  const currentFile = currSong.src.split("/").pop();
-  const id = songs.findIndex(s => s.split("/").pop() === currentFile);
-  if (id > 0) playMusic(songs[id - 1]);
-});
-
-next.addEventListener("click", () => {
-  const currentFile = currSong.src.split("/").pop();
-  const id = songs.findIndex(s => s.split("/").pop() === currentFile);
-  if (id >= 0 && id < songs.length - 1) playMusic(songs[id + 1]);
-});
-
-// Format seconds to mm:ss
-function secondsToMinutesSeconds(seconds) {
-  if (isNaN(seconds) || seconds < 0) return "0:00";
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-}
-
-// Initialize
-renderSongs();
-if (songs.length > 0) playMusic(songs[0], true);
