@@ -176,9 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Songs stored in public/songs/
   const songs = [
-    "/songs/cascade.mp3",
-    "/songs/song2.mp3",
-    "/songs/song3.mp3"
+    "/songs/cascade.mp3"
   ];
 
   let currentIndex = 0;
