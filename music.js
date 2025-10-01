@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "/songs/retro lounge.mp3",
     "/songs/running night.mp3",
     "/songs/the last point.mp3",
-    "/songs/.golden sparrow.mp3"
+    "/songs/golden sparrow.mp3"
   ];
 
   let currentIndex = 0;
