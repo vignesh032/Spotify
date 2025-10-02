@@ -441,13 +441,19 @@ h3{
     .links h3{
         font-size: 16px;
     }
+    .song h3{
+        font-size: 16px;
+    }
+    .links svg{
+        height: 4vh;
+    }
     .footer{
         display: none;
     }
     .nav h3,h5{
-        font-size: 14px;
+        font-size: 18px;
         display: flex;
-        padding: 0 1em 0 1em;
+        padding: 0 2em 0 2em;
     }
     .title h3{
          font-size: 14px;
@@ -461,12 +467,13 @@ h3{
         height: 100%;
     }
     .song svg{
-        height: 3vh;
-        width: 5vw;
-        left: 12em;
-        bottom: 7em;
+        height: 4vh;
+        width: 6vw;
+        left: 20em;
+        bottom: 10em;
         
-    }.left{
+    }
+    .left{
         width: 80vw;
     }
      .playbar{
@@ -497,8 +504,12 @@ h3{
     }
     
     .song img{
-        width: 40vw;
+        width: 70vw;
+        height: 40vh;
     }
+    .albums::-webkit-scrollbar {
+        display:none; 
+}
      .wrong{
         display: block;
         padding: 1em;
@@ -515,6 +526,24 @@ h3{
     button{
         width: 15vw;
         font-size: 12px;
+    }
+    .artists{
+        display: none;
+    }
+    .albums{
+        display: flex;
+        justify-content: center;
+        height: 80vh;
+        padding: 0em;
+        gap: 3em;
+        overflow: scroll;
+        width: 90vw;
+    }
+    .song{
+        height: 50vh;
+        width: 70vw;
+        
+        padding: 2em 2em 0 2em ;
     }
     .songscard li{
         font-size: 8px;
